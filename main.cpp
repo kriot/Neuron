@@ -159,11 +159,7 @@ double teach_iteration(vector<double> in, vector<double> out)
     val[0] = in;
     calc();
     double dE = calc_dE(out);
-    cout<<"dE="<<dE<<"\n";
-    if(dE > 1)
-    {
-	cout<<"OLO";
-    }
+    //cout<<"dE="<<dE<<"\n";
     vector< vector<double> >q;
     q.resize(w.size());
     for(int i=0;i<q.size();i++)
