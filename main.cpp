@@ -16,9 +16,13 @@ void error(string msg)
 
 vector< vector< vector<double> > >w; 
 vector< vector< double > > val;
-
+vector< pair< vector<double>, vector<double> > > t;
+double E_need;
+    
 double nu = 0.1;
 double c = 0.01;
+int isize = 30;
+#define MAX_ITERATIONS 500000
 
 double scalar(vector<double> x,vector<double> y)
 {
@@ -86,6 +90,35 @@ void set_in()
     }
 }
 
+void set_in_image(string path)
+{
+    ifstream in((path+".bmp").c_str(), ios::in|ios::binary);
+    if(!in)
+    {
+	cout<<"Can not open image file\n";
+	return;
+    }
+    if(val[0].size()!=sqr(isize))
+    {
+	cout<<"This neuron net is not to able to load images this size ("<<isize<<")\n";
+	return;
+    }
+    in.seekg(0,ios::end);
+    int size = (int)in.tellg();
+    in.seekg(0);
+    in.ignore(size-sqr(isize)*3);
+    int i=0;
+    for(;in.good();i++)
+    {
+	unsigned char x;
+	in>>x;
+	in>>x;
+	in>>x;
+	val[0][i]=(int)x;
+    }
+    in.close();
+}
+
 void print_out()
 {
     cout<<"OUT vector ("<<val.back().size()<<")\n";
@@ -138,6 +171,7 @@ void save_net(string file)
 	    {
 		out<<w[i][j][k]<<" ";
 	    }
+	    out<<"\n";
 	}
     }
     out.close();
@@ -195,41 +229,119 @@ double teach_iteration(vector<double> in, vector<double> out)
     }
     return dE;
 }
-
-void teach()
+void set_educate(bool kbd, string file)
 {
-    cout<<"How many educational pairs? ";
     int n;
-    cin>>n;
-    vector< pair< vector<double>, vector<double> > > t(n);
-    for(int i=0;i<n;i++)
+    ifstream in;
+
+    if(!kbd)
+    	in.open((file+".edu").c_str());
+
+    if(kbd)
     {
-	cout<<"Input IN vector ("<<val[0].size()<<")\n";
+	cout<<"How many educational pairs? ";
+	cin>>n;
+    }
+    else
+	in>>n;
+    t.resize(n);
+    char c;
+    if(kbd)
+    {
+	cout<<"Type (v-vector, i-image): ";
+	cin>>c;
+    }
+    else
+    {
+	in>>c;
+    }
+    if(c!='v' && c!='i')
+    {
+	cout<<"Type must be 'i' or 'v'.";
+	return;
+    }
+    for(int i=0;i<t.size();i++)
+    {
 	t[i].first.resize(val[0].size());
-	for(int j=0;j<val[0].size();j++)
+	if(c=='v')
 	{
-	    cin>>t[i].first[j];
+	    if(kbd)
+	    {
+		cout<<"Input IN vector ("<<val[0].size()<<")\n";
+		for(int j=0;j<val[0].size();j++)
+		{
+		    cin>>t[i].first[j];
+		}
+	    }
+	    else
+	    {
+		for(int j=0;j<val[0].size();j++)
+		{
+		    in>>t[i].first[j];
+		}
+	    }
 	}
-	cout<<"Input OUT vector ("<<val.back().size()<<")\n";
-	t[i].second.resize(val.back().size());
-	for(int j=0;j<val.back().size();j++)
+	if(c=='i')
 	{
-	    cin>>t[i].second[j];
+	    string img;
+	    if(kbd)
+	    {
+		cout<<"Image: ";
+		cin>>img;
+	    }
+	    else
+	    {
+		in>>img;
+	    }
+	    set_in_image(img);
+	    t[i].first = vector<double>(val[0]);
+	}
+	//out
+	t[i].second.resize(val.back().size());
+	if(kbd)
+	{
+	    cout<<"Input OUT vector ("<<val.back().size()<<")\n";
+	    for(int j=0;j<val.back().size();j++)
+	    {
+		cin>>t[i].second[j];
+	    }
+	}
+	else
+	{
+	    for(int j=0;j<val.back().size();j++)
+	    {
+		in>>t[i].second[j];
+	    }
 	}
     }
-    cout<<"E: ";
+    if(kbd)
+    {
+	cout<<"E: ";
+	cin>>E_need;
+    }
+    else
+    {
+	in>>E_need;
+    }
+    if(!kbd)
+	in.close();
+}
+void teach()
+{
     int it = 0;
-    double E_need;
-    cin>>E_need;
     double E = E_need * 2;
     for(;E_need<E;it++)
     {
+	if(it>MAX_ITERATIONS)
+	{
+	    cout<<"Two many iterations. It seems net is not able to be educated by this educational kit. Try to make E bit more or grow your network.\n";
+	}
         E = 0;
-	for(int j=0;j<n;j++)
+	for(int j=0;j<t.size();j++)
 	{
 	    E += teach_iteration(t[j].first,t[j].second);
 	}
-	E /= n;
+	E /= t.size();
 	E = sqrt(E);
     }
     cout<<"Iterations: "<<it<<"\n"
@@ -263,6 +375,8 @@ void make()
     }
     cout<<"You can't use this net! It need to save and load again!\n";
 }
+
+
 int main()
 {
     char c;
@@ -292,8 +406,26 @@ int main()
 	    calc();
 	    print_out();
 	}
+	if(c=='r')
+	{
+	    string p;
+	    cout<<"Image?:\n";
+	    cin>>p;
+	    set_in_image(p);
+	    calc();
+	    print_out();
+	}
 	if(c=='t')
 	{
+	    set_educate(true,"");
+	    teach();
+	}
+	if(c=='e')
+	{
+	    string file;
+	    cout<<"Education file:\n";
+	    cin>>file;
+	    set_educate(false,file);
 	    teach();
 	}
 	if(c=='m')
