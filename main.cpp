@@ -154,7 +154,7 @@ double calc_dE(vector<double> out)
     return E*0.5;
 }
 
-void teach_iteration(vector<double> in, vector<double> out)
+double teach_iteration(vector<double> in, vector<double> out)
 {
     val[0] = in;
     calc();
@@ -197,6 +197,7 @@ void teach_iteration(vector<double> in, vector<double> out)
 	    }
 	}
     }
+    return dE;
 }
 
 void teach()
@@ -220,16 +221,23 @@ void teach()
 	    cin>>t[i].second[j];
 	}
     }
-    cout<<"Iterations: ";
-    int it;
-    cin>>it;
-    for(int i=0;i<it;i++)
+    cout<<"E: ";
+    int it = 0;
+    double E_need;
+    cin>>E_need;
+    double E = E_need * 2;
+    for(;E_need<E;it++)
     {
+        E = 0;
 	for(int j=0;j<n;j++)
 	{
-	    teach_iteration(t[j].first,t[j].second);
+	    E += teach_iteration(t[j].first,t[j].second);
 	}
+	E /= n;
+	E = sqrt(E);
     }
+    cout<<"Iterations: "<<it<<"\n"
+	<<"E: "<<E<<"\n";
 }
 void make()
 {
