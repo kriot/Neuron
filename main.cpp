@@ -106,10 +106,17 @@ void set_in_image(string path)
     in.seekg(0,ios::end);
     int size = (int)in.tellg();
     in.seekg(0);
+    cout<<"Image file size: "<<size<<"\n";
+    
     in.ignore(size-sqr(isize)*3);
     int i=0;
     for(;in.good();i++)
     {
+	if(i>sqr(isize))
+	{
+	    cout<<"Too many bytes for input\n";
+	    return;
+	}
 	unsigned char x;
 	in>>x;
 	in>>x;
@@ -335,6 +342,7 @@ void teach()
 	if(it>MAX_ITERATIONS)
 	{
 	    cout<<"Two many iterations. It seems net is not able to be educated by this educational kit. Try to make E bit more or grow your network.\n";
+	    break;
 	}
         E = 0;
 	for(int j=0;j<t.size();j++)
