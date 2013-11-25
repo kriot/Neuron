@@ -388,6 +388,8 @@ void make()
 int main()
 {
     char c;
+    cout<<"Hi!";
+    cout<<"I am a neuron network. To get more information, type 'h'.";
     while(cout<<'$', cin>>c)
     {
 	if(c=='q')
