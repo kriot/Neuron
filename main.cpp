@@ -383,7 +383,17 @@ void make()
     }
     cout<<"You can't use this net! It need to save and load again!\n";
 }
-
+void print_help()
+{
+    cout<<"h - help\n";
+    cout<<"q - exit\n";
+    cout<<"l - load network form file\n";
+    cout<<"c - calc(vector)\n";
+    cout<<"r - reconize image (calc for image)\n";
+    cout<<"m - make a new network\n";
+    cout<<"t - teach the network\n";
+    cout<<"e - educate from file\n";
+}
 
 int main()
 {
@@ -395,6 +405,10 @@ int main()
 	if(c=='q')
 	{
 	    break;
+	}
+	if(c=='h')
+	{
+	    print_help();
 	}
 	if(c=='l')
 	{
