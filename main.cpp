@@ -68,6 +68,12 @@ double f_p(double x)
     return 4/(sqr(exp(x)+exp(-x)));
     return -x*(1-x);
 }
+double f_p_out(double x)
+{
+	return f_p(x);
+}
+
+
 void calc()
 {
     for(int i=1;i<val.size();i++)
@@ -214,11 +220,14 @@ double teach_iteration(vector<double> in, vector<double> out)
     {
 	q[i].resize(w[i].size(),0);
     }
+	//output layer
     for(int i=0;i<q.back().size();i++)
     {
 	double oi = val.back()[i];
-	q.back()[i] = f_p(oi)*(out[i]-oi);
+	q.back()[i] = f_p_out(oi)*(out[i]-oi);
     }
+
+
     for(int i=q.size()-2;i>0;i--)
     {
 	for(int j=0;j<q[i].size();j++)
@@ -231,6 +240,7 @@ double teach_iteration(vector<double> in, vector<double> out)
 	    q[i][j]= f_p(val[i][j])*sum;
 	}
     }
+
     for(int i=1;i<w.size();i++)
     {
 	for(int j=0;j<w[i].size();j++)
