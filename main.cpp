@@ -361,7 +361,7 @@ void teach()
 			cout<<"Do you want not to stop ever?\n";
 			char notstop;
 			cin>>notstop;
-			if(notstop!='y')
+			if(notstop=='y')
 			{
 				order+=10;
 			}
