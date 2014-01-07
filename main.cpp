@@ -22,7 +22,13 @@ double E_need;
 double nu = 0.1;
 double c = 0.01;
 int isize = 30;
-#define MAX_ITERATIONS 500000
+#define MAX_ITERATIONS 1500000
+
+void setup_consts()
+{
+	cout<<"Speed of teaching? (def 0.1)\n";
+	cin>>nu;
+}
 
 double scalar(vector<double> x,vector<double> y)
 {
@@ -75,10 +81,11 @@ void calc()
 	    val[i][j] = scalar(w[i][j], val[i-1]); 
 	}
     }
-    for(int j=0;j<val.back().size();j++)
-    {
-	val.back()[j] = f(val.back()[j]);
-    }
+// f for the lastest layer
+    //for(int j=0;j<val.back().size();j++)
+    //{
+//	val.back()[j] = f(val.back()[j]);
+    //}
 }
 
 void set_in()
@@ -351,6 +358,10 @@ void teach()
 	}
 	E /= t.size();
 	E = sqrt(E);
+	if(it%1500==0)
+	{
+		cout<<"Iteration: "<<it<<" E="<<E<<"\n";
+	}
     }
     cout<<"Iterations: "<<it<<"\n"
 	<<"E: "<<E<<"\n";
@@ -393,13 +404,14 @@ void print_help()
     cout<<"m - make a new network\n";
     cout<<"t - teach the network\n";
     cout<<"e - educate from file\n";
+	cout<<"x - set up consts\n";
 }
 
 int main()
 {
     char c;
-    cout<<"Hi!";
-    cout<<"I am a neuron network. To get more information, type 'h'.";
+    cout<<"Hi!\n";
+    cout<<"I am a neuron network. To get more information, type 'h'.\n";
     while(cout<<'$', cin>>c)
     {
 	if(c=='q')
@@ -455,6 +467,10 @@ int main()
 	if(c=='m')
 	{
 	    make();
+	}
+	if(c=='x')
+	{
+		setup_consts();
 	}
     }
     cout<<"Bye!\n";
