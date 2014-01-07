@@ -343,13 +343,29 @@ void set_educate(bool kbd, string file)
 void teach()
 {
     int it = 0;
+	int order = 1;
     double E = E_need * 2;
     for(;E_need<E;it++)
     {
-	if(it>MAX_ITERATIONS)
+	if(it>MAX_ITERATIONS*order)
 	{
 	    cout<<"Two many iterations. It seems net is not able to be educated by this educational kit. Try to make E bit more or grow your network.\n";
-	    break;
+	    cout<<"Would you like continue? (y/N)\n";
+		char cont;
+		cin>>cont;
+		if(cont!='y')
+			break;
+		else
+		{
+			order++;
+			cout<<"Do you want not to stop ever?\n";
+			char notstop;
+			cin>>notstop;
+			if(notstop!='y')
+			{
+				order+=10;
+			}
+		}
 	}
         E = 0;
 	for(int j=0;j<t.size();j++)
