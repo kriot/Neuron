@@ -20,7 +20,7 @@ vector< pair< vector<double>, vector<double> > > t;
 double E_need;
     
 double nu = 0.1;
-double c = 0.01;
+double c = 0.1;
 int isize = 30;
 #define MAX_ITERATIONS 1500000
 
@@ -60,13 +60,15 @@ vector<double> dec(vector<double> x,vector<double> y)
 
 double f(double x)
 {
-    return (exp(x)-exp(-x))/(exp(x)+exp(-x));
-    return 1.0/(1+exp(-x*c));
+//    return (exp(x)-exp(-x))/(exp(x)+exp(-x));
+//    return 1.0/(1+exp(-x*c));
+	return x/(c+abs(x));
 }
 double f_p(double x)
 {
-    return 4/(sqr(exp(x)+exp(-x)));
-    return -x*(1-x);
+//    return 4/(sqr(exp(x)+exp(-x)));
+//    return -x*(1-x);
+	return c/sqr(abs(x)+c);
 }
 double f_p_out(double x)
 {
@@ -373,17 +375,18 @@ void teach()
 			cin>>notstop;
 			if(notstop=='y')
 			{
-				order+=10;
+				order+=100;
 			}
 		}
 	}
         E = 0;
 	for(int j=0;j<t.size();j++)
 	{
-	    E += teach_iteration(t[j].first,t[j].second);
+	    double E_now = teach_iteration(t[j].first,t[j].second);
+		E_now /= val.back().size();
+		E_now = sqrt(E_now);
+		E = max(E, E_now);
 	}
-	E /= t.size();
-	E = sqrt(E);
 	if(it%1500==0)
 	{
 		cout<<"Iteration: "<<it<<" E="<<E<<"\n";
