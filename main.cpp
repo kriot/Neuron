@@ -23,7 +23,7 @@ double nu = 0.1;
 double c = 0.1;
 int isize = 30;
 double k_plus = 1.00001;
-double k_minus = 0.8;
+double k_minus = 0.99998;
 #define MAX_ITERATIONS 1500000
 
 void setup_consts()
@@ -263,7 +263,15 @@ void set_educate(bool kbd, string file)
     ifstream in;
 
     if(!kbd)
+	{
     	in.open((file+".edu").c_str());
+	int ins, outs;
+	in >> ins >> outs;
+	if(ins!=val.front().size() || outs!=val.back().size())
+	{
+		cout<<"This edu file is other size than net.\nEdu size: "<<ins<<" "<<outs<<"\nNet size: "<<val.front().size()<<" "<<val.back().size()<<"\n";
+	}
+	}
 
     if(kbd)
     {
@@ -378,7 +386,7 @@ void teach()
 			cin>>notstop;
 			if(notstop=='y')
 			{
-				order+=100;
+				order+=10000;
 			}
 		}
 	}
@@ -390,18 +398,19 @@ void teach()
 		E_now = sqrt(E_now);
 		E = max(E, E_now);
 	}
-	if(E>E_prev)
-	{
-		nu*=k_minus;
-	}
-	else
-	{
-		nu*=k_plus;
-	}
-	E_prev = E;
 	if(it%1500==0)
 	{
-		cout<<"Iteration: "<<it<<" E="<<E<<"\n";
+		if(E>E_prev)
+		{
+			nu*=k_minus;
+		}
+		else
+		{
+			nu*=k_plus;
+		}
+		E_prev = E;
+	
+		cout<<"Iteration: "<<it<<" E="<<E<<" nu="<<nu<<"\n";
 	}
     }
     cout<<"Iterations: "<<it<<"\n"
