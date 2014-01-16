@@ -22,6 +22,8 @@ double E_need;
 double nu = 0.1;
 double c = 0.1;
 int isize = 30;
+double k_plus = 1.00001;
+double k_minus = 0.8;
 #define MAX_ITERATIONS 1500000
 
 void setup_consts()
@@ -355,6 +357,7 @@ void set_educate(bool kbd, string file)
 void teach()
 {
     int it = 0;
+	double E_prev = 100;
 	int order = 1;
     double E = E_need * 2;
     for(;E_need<E;it++)
@@ -387,6 +390,15 @@ void teach()
 		E_now = sqrt(E_now);
 		E = max(E, E_now);
 	}
+	if(E>E_prev)
+	{
+		nu*=k_minus;
+	}
+	else
+	{
+		nu*=k_plus;
+	}
+	E_prev = E;
 	if(it%1500==0)
 	{
 		cout<<"Iteration: "<<it<<" E="<<E<<"\n";
