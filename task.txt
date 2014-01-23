@@ -1,0 +1,9 @@
+TO DO list:
+
+Code optimization:
+	1) use ask, msg functions
+	2) make ability to stop education in process
+
+Net optimization:
+	1) nu is that dE = max (it's the best, certainly)
+	2) to additionl net calculate d(x)/d(out)
