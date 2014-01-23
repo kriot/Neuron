@@ -3,6 +3,7 @@ TO DO list:
 Code optimization:
 	1) use ask, msg functions
 	2) make ability to stop education in process
+	3) shell in commands like ("l nums r 1")
 
 Net optimization:
 	1) nu is that dE = max (it's the best, certainly)
