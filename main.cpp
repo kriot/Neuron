@@ -29,12 +29,12 @@ vector< vector< double > > val;
 vector< pair< vector<double>, vector<double> > > t;
 double E_need;
     
-double nu = 10;
+double nu = 0.05;
 double c = 0.1;
 int isize = 30;
-int show_it = 1000;
-double k_plus = 1.000001;
-double k_minus = 0.2;
+int show_it = 10;
+double k_plus = 1.02;
+double k_minus = 0.9;
 int max_it =  1500000;
 bool wanttotalk = true;
 
@@ -148,9 +148,7 @@ int main(int argc, char* argv[])
 		}
 		if(c=='s')
 		{
-	    		string file;
-	    		cout<<"File to save?\n";
-	    		cin>>file;
+	    		string file = ask<string>("File to save?");
 	    		save_net(file);
 		}
 		if(c=='c')
@@ -161,9 +159,7 @@ int main(int argc, char* argv[])
 		}
 		if(c=='r')
 		{
-			string p;
-	   		cout<<"Image?:\n";
-	   		cin>>p;
+			string p = ask<string>("Image?");
 	    		set_in_image(p);
 	    		calc();
 	    		print_out();
@@ -175,9 +171,7 @@ int main(int argc, char* argv[])
 		}
 		if(c=='e')
 		{
-			string file;
-	    		cout<<"Education file:\n";
-	    		cin>>file;
+			string file = ask<string>("Education file?");
 	  		set_educate(false,file);
 	   		teach();
 		}
@@ -189,7 +183,6 @@ int main(int argc, char* argv[])
 		{
 			setup_consts();
 		}
-		getchar();
     	}
 	if(wanttotalk)
 	{
