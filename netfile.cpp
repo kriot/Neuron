@@ -7,7 +7,7 @@ extern vector< vector< double > > val;
  
 void load_net(string file)
 {
-    ifstream in(file.c_str());
+    ifstream in((file+".net").c_str());
     int levels, lastneurons;
     in>>levels;
     in>>lastneurons;
@@ -35,7 +35,7 @@ void load_net(string file)
 }
 void save_net(string file)
 {
-    ofstream out(file.c_str());
+    ofstream out((file+".net").c_str());
     out<<w.size()<<"\n";
     out<<w[0].size()<<"\n";
     for(int i=1;i<w.size();i++)
