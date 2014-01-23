@@ -85,6 +85,7 @@ void print_out()
 }
 void print_help()
 {
+	cout<<"Inner shell commands:\n";
     	cout<<"h - help\n";
     	cout<<"q - exit\n";
     	cout<<"l - load network form file\n";
@@ -96,9 +97,18 @@ void print_help()
 	cout<<"x - set up consts\n";
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-    char c;
+	for(int i=1;i<argc;i++)
+	{
+		string arg = string(argv[i]);
+		if(arg=="-h")
+		{
+			print_help();
+			exit(0);
+		}
+	}	
+	char c;
     cout<<"Hi!\n";
     cout<<"I am a neuron network. To get more information, type 'h'.\n";
     while(c = getcom())
