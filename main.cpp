@@ -17,6 +17,7 @@ extern vector<double> dec(vector<double>,vector<double>);
 extern void set_in_image(string);
 extern bool set_educate(bool,string);
 extern void teach();
+extern char getcom();
 vector< vector< vector<double> > >w; 
 vector< vector< double > > val;
 vector< pair< vector<double>, vector<double> > > t;
@@ -100,7 +101,7 @@ int main()
     char c;
     cout<<"Hi!\n";
     cout<<"I am a neuron network. To get more information, type 'h'.\n";
-    while(cout<<'$', cin>>c)
+    while(c = getcom())
     {
 	if(c=='q')
 	{
@@ -160,6 +161,7 @@ int main()
 	{
 		setup_consts();
 	}
+	getchar();
     }
     cout<<"Bye!\n";
 }
