@@ -4,11 +4,16 @@
 #include <vector>
 #include <stdlib.h>
 #include <cmath>
-
+#include <sstream>
 #define sqr(x) ((x)*(x))
 using namespace std;
 
 extern void errorf(string);
+template<class T>
+extern T ask(string);
+template<class T>
+extern void pushbuff(T);
+extern stringstream getbuff;
 extern void load_net(string);
 extern void save_net(string);
 extern void make();
@@ -18,6 +23,7 @@ extern void set_in_image(string);
 extern bool set_educate(bool,string);
 extern void teach();
 extern char getcom();
+extern void msg(string);
 vector< vector< vector<double> > >w; 
 vector< vector< double > > val;
 vector< pair< vector<double>, vector<double> > > t;
@@ -30,6 +36,7 @@ int show_it = 1000;
 double k_plus = 1.000001;
 double k_minus = 0.2;
 int max_it =  1500000;
+bool wanttotalk = true;
 
 void setup_consts()
 {
@@ -107,71 +114,85 @@ int main(int argc, char* argv[])
 			print_help();
 			exit(0);
 		}
+		if(arg=="-c")
+		{
+			for(int j=i+1;j<argc;j++)
+			{
+				pushbuff(argv[j]);
+			}
+			break;
+		}
+		if(arg=="-m")
+			wanttotalk = false;
 	}	
 	char c;
-    cout<<"Hi!\n";
-    cout<<"I am a neuron network. To get more information, type 'h'.\n";
-    while(c = getcom())
-    {
-	if(c=='q')
+	if(wanttotalk)
 	{
-	    break;
-	}
-	if(c=='h')
+		msg("Hi!");
+    		msg("I am a neuron network. To get more information, type 'h'.");
+    	}
+	while(c = getcom())
+    	{
+		if(c=='q')
+		{
+			break;
+		}
+		if(c=='h')
+		{
+			print_help();
+		}
+		if(c=='l')
+		{
+			string file = ask<string>("Neuron net file name?");
+	   		load_net(file);
+		}
+		if(c=='s')
+		{
+	    		string file;
+	    		cout<<"File to save?\n";
+	    		cin>>file;
+	    		save_net(file);
+		}
+		if(c=='c')
+		{
+			set_in();
+			calc();
+	    		print_out();
+		}
+		if(c=='r')
+		{
+			string p;
+	   		cout<<"Image?:\n";
+	   		cin>>p;
+	    		set_in_image(p);
+	    		calc();
+	    		print_out();
+		}
+		if(c=='t')
+		{
+			set_educate(true,"");
+	    		teach();
+		}
+		if(c=='e')
+		{
+			string file;
+	    		cout<<"Education file:\n";
+	    		cin>>file;
+	  		set_educate(false,file);
+	   		teach();
+		}
+		if(c=='m')
+		{
+			make();
+		}
+		if(c=='x')
+		{
+			setup_consts();
+		}
+		getchar();
+    	}
+	if(wanttotalk)
 	{
-	    print_help();
+    		msg("Bye!");
 	}
-	if(c=='l')
-	{
-	    string file;
-	    cout<<"Neuron net file name?\n";
-	    cin>>file;
-	    load_net(file);
-	}
-	if(c=='s')
-	{
-	    string file;
-	    cout<<"File to save?\n";
-	    cin>>file;
-	    save_net(file);
-	}
-	if(c=='c')
-	{
-	    set_in();
-	    calc();
-	    print_out();
-	}
-	if(c=='r')
-	{
-	    string p;
-	    cout<<"Image?:\n";
-	    cin>>p;
-	    set_in_image(p);
-	    calc();
-	    print_out();
-	}
-	if(c=='t')
-	{
-	    set_educate(true,"");
-	    teach();
-	}
-	if(c=='e')
-	{
-	    string file;
-	    cout<<"Education file:\n";
-	    cin>>file;
-	    set_educate(false,file);
-	    teach();
-	}
-	if(c=='m')
-	{
-	    make();
-	}
-	if(c=='x')
-	{
-		setup_consts();
-	}
-	getchar();
-    }
-    cout<<"Bye!\n";
 }
